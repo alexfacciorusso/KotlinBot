@@ -14,15 +14,13 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 public class KotlinBotServlet : HttpServlet() {
-    private val TOKEN = "YOUR_TOKEN"
-
     override fun doGet(req: HttpServletRequest, resp: HttpServletResponse) {
         resp.writer.print("Method not supported")
     }
 
-    fun makeYouTrackBugGetRequest(query: String?, maxItems: Int = 5): String? {
+    fun makeYouTrackBugGetRequest(query: String? = "", maxItems: Int = 5): String? {
         try {
-            val url = URL("https://youtrack.jetbrains.com/rest/issue/byproject/KT?max=$maxItems")
+            val url = URL("https://youtrack.jetbrains.com/rest/issue/byproject/KT?max=$maxItems&filter=$query")
             val request = HTTPRequest(url)
             request.setHeader(HTTPHeader("Accept", "application/json"))
             val response = URLFetchServiceFactory.getURLFetchService().fetch(request)
@@ -38,7 +36,7 @@ public class KotlinBotServlet : HttpServlet() {
         val command = req.getParameter("command")
         val query = req.getParameter("text")
 
-        if (token == TOKEN) {
+        if (token == getToken()) {
             when (command) {
                 "/ktbug" -> {
                     postKtbug(resp, query)
