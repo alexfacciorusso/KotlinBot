@@ -8,3 +8,5 @@ local.properties
 /robolectric-tests/*.iml
 thumbs.db
 /local_db.bin
+
+backend/src/main/java/com/alexfacciorusso/kotlinbot/Token.kt
