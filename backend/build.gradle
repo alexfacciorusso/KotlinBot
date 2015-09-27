@@ -1,0 +1,74 @@
+apply plugin: 'java'
+apply plugin: 'kotlin'
+apply plugin: 'war'
+apply plugin: 'appengine'
+
+//noinspection GroovyUnusedAssignment
+sourceCompatibility = JavaVersion.VERSION_1_7
+
+//noinspection GroovyUnusedAssignment
+targetCompatibility = JavaVersion.VERSION_1_7
+
+dependencies {
+    appengineSdk "com.google.appengine:appengine-java-sdk:$appengine_version"
+    compile 'javax.servlet:servlet-api:2.5'
+
+    compile 'com.google.appengine.orm:datanucleus-appengine:2.1.2'
+    compile "com.google.appengine:appengine-api-labs:$appengine_version"
+    compile 'com.google.appengine:appengine-jsr107cache:1.9.17'
+
+    compile 'org.ow2.asm:asm:4.0'
+
+    compile 'org.datanucleus:datanucleus-api-jdo:3.1.3'
+    compile 'org.datanucleus:datanucleus-core:3.1.3'
+    compile 'org.datanucleus:datanucleus-cache:3.1.3'
+
+    compile 'net.sf.jsr107cache:jsr107cache:1.1'
+    compile 'javax.jdo:jdo-api:3.0.1'
+
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile('com.floreysoft:jmte:3.1.1') {
+        exclude group: 'asm'
+    }
+
+    compile 'com.fasterxml.jackson.core:jackson-core:2.4.2'
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.4.0'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.4.2'
+    compile 'com.fasterxml.jackson.module:jackson-module-kotlin:2.6.2'
+    runtime "org.jetbrains.kotlin:kotlin-reflect:0.13.1513"
+}
+
+appengine {
+    downloadSdk = true
+    appcfg {
+        oauth2 = true
+    }
+    enhancer {
+        version = 'v2'
+        api = 'jdo'
+        enhanceOnBuild = true
+    }
+
+    jvmFlags = ['-Ddatastore.backing_store=$rootDir/local_db.bin',
+                '-Dappengine.fullscan.seconds=5',
+                '-Xdebug',
+                '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005']
+}
+
+import com.google.appengine.AppEnginePlugin
+
+task reloadClasses(type: Copy) {
+    from sourceSets.main.output
+    into "${AppEnginePlugin.getExplodedAppDirectory(project)}/WEB-INF/classes"
+
+    dependsOn classes, appengineEnhance
+}
+
+task reloadWebAppDir(type: Copy) {
+    from(project.convention.getPlugin(WarPluginConvention).webAppDir)
+    into AppEnginePlugin.getExplodedAppDirectory(project)
+}
+
+task customReload {
+    dependsOn reloadClasses, reloadWebAppDir
+}

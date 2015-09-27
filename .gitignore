@@ -1,0 +1,10 @@
+.gradle
+.idea
+build
+local.properties
+*.iml
+/blsAndroid/*.iml
+/dateTimePicker/*.iml
+/robolectric-tests/*.iml
+thumbs.db
+/local_db.bin
