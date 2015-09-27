@@ -6,5 +6,5 @@ package com.alexfacciorusso.kotlinbot
  */
 
 fun getToken(): String {
-    return "ZUafg61H10huqaoHoVOKSgmq"
+    return "YOUR_TOKEN"
 }
