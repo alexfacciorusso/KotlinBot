@@ -39,7 +39,11 @@ public class KotlinBotServlet : HttpServlet() {
         if (token == getToken()) {
             when (command) {
                 "/ktbug" -> {
-                    postKtbug(resp, query)
+                    if (query.isNotBlank()) {
+                        postKtbug(resp, query)
+                    } else {
+                        resp.writer.print("No query.")
+                    }
                 }
             }
         } else {
@@ -58,10 +62,12 @@ public class KotlinBotServlet : HttpServlet() {
         val tree = ObjectMapper().readTree(result)
         val bugs = parseBugsTree(tree)
 
-        for (bug in bugs) {
+        if (bugs.isEmpty()) {
+            resp.writer.print("No results.")
+        } else for (bug in bugs) {
             with(bug) {
-                resp.writer.print("*Reporter name:* $reporterFullname ($reporterNickname)\n" +
-                        "*Summary:* $summary\n*Link:* <$link>\n\n")
+                resp.writer.println("*Reporter name:* $reporterFullname ($reporterNickname)\n" +
+                        "*Summary:* $summary\n*Link:* <$link>\n")
             }
         }
     }
