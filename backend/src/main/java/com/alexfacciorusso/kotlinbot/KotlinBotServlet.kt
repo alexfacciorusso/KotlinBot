@@ -18,19 +18,6 @@ public class KotlinBotServlet : HttpServlet() {
         resp.writer.print("Method not supported")
     }
 
-    fun makeYouTrackBugGetRequest(query: String? = "", maxItems: Int = 5): String? {
-        try {
-            val url = URL("https://youtrack.jetbrains.com/rest/issue/byproject/KT?max=$maxItems&filter=$query")
-            val request = HTTPRequest(url)
-            request.setHeader(HTTPHeader("Accept", "application/json"))
-            val response = URLFetchServiceFactory.getURLFetchService().fetch(request)
-            return response.content.toString("UTF-8")
-        } catch (e: MalformedURLException) {
-        } catch (e: IOException) {
-        }
-        return null
-    }
-
     override fun doPost(req: HttpServletRequest, resp: HttpServletResponse) {
         var token = req.getParameter("token")
         val command = req.getParameter("command")
@@ -49,6 +36,19 @@ public class KotlinBotServlet : HttpServlet() {
         } else {
             resp.writer.print("Token not accepted.")
         }
+    }
+
+    private fun makeYouTrackBugGetRequest(query: String? = "", maxItems: Int = 5): String? {
+        try {
+            val url = URL("https://youtrack.jetbrains.com/rest/issue/byproject/KT?max=$maxItems&filter=$query")
+            val request = HTTPRequest(url)
+            request.setHeader(HTTPHeader("Accept", "application/json"))
+            val response = URLFetchServiceFactory.getURLFetchService().fetch(request)
+            return response.content.toString("UTF-8")
+        } catch (e: MalformedURLException) {
+        } catch (e: IOException) {
+        }
+        return null
     }
 
     /**
