@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.appengine.api.urlfetch.HTTPHeader
 import com.google.appengine.api.urlfetch.HTTPRequest
 import com.google.appengine.api.urlfetch.URLFetchServiceFactory
+import com.ullink.slack.simpleslackapi.SlackSession
 import java.io.IOException
 import java.net.MalformedURLException
 import java.net.URL

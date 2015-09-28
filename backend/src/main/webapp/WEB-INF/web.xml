@@ -4,10 +4,18 @@
         <servlet-name>KotlinBot</servlet-name>
         <servlet-class>com.alexfacciorusso.kotlinbot.KotlinBotServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>KotlinBotTest</servlet-name>
+        <servlet-class>com.alexfacciorusso.kotlinbot.KotlinBotTestServlet</servlet-class>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>KotlinBot</servlet-name>
         <url-pattern>/</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>KotlinBotTest</servlet-name>
+        <url-pattern>/test</url-pattern>
     </servlet-mapping>
 
     <welcome-file-list>
